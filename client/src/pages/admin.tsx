@@ -13,15 +13,286 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { Settings, Trash2, Edit, Plus, Server as ServerIcon, Car as CarIcon, Package, Crown } from "lucide-react";
-import type { Server, Car, ShopItem } from "@shared/schema";
+import type { Server, Car, ShopItem, InsertServer, InsertCar, InsertShopItem } from "@shared/schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { insertServerSchema, insertCarSchema, insertShopItemSchema } from "@shared/schema";
+
+// Form Components
+function ServerForm({ onSubmit }: { onSubmit: (data: InsertServer) => void }) {
+  const form = useForm<InsertServer>({
+    resolver: zodResolver(insertServerSchema),
+    defaultValues: {
+      name: "",
+      region: "",
+      description: "",
+      imageUrl: "",
+      status: "online",
+      playerCount: 0,
+      maxPlayers: 100,
+    },
+  });
+
+  const handleSubmit = (data: InsertServer) => {
+    onSubmit(data);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Server Name</FormLabel>
+              <FormControl>
+                <Input {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="region"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Region</FormLabel>
+              <FormControl>
+                <Input {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Description</FormLabel>
+              <FormControl>
+                <Textarea {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="imageUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Image URL</FormLabel>
+              <FormControl>
+                <Input {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+          Create Server
+        </Button>
+      </form>
+    </Form>
+  );
+}
+
+function CarForm({ onSubmit }: { onSubmit: (data: InsertCar) => void }) {
+  const form = useForm<InsertCar>({
+    resolver: zodResolver(insertCarSchema),
+    defaultValues: {
+      name: "",
+      make: "",
+      year: new Date().getFullYear(),
+      category: "sports",
+      description: "",
+      imageUrl: "",
+      downloadUrl: "",
+      tags: [],
+      hasEgyptianPlates: false,
+      isActive: true,
+    },
+  });
+
+  const handleSubmit = (data: InsertCar) => {
+    onSubmit(data);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Car Name</FormLabel>
+              <FormControl>
+                <Input {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="make"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Make</FormLabel>
+              <FormControl>
+                <Input {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Category</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="bg-gray-700 border-gray-600">
+                  <SelectItem value="sports">Sports</SelectItem>
+                  <SelectItem value="luxury">Luxury</SelectItem>
+                  <SelectItem value="drift">Drift</SelectItem>
+                  <SelectItem value="classic">Classic</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="downloadUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Download URL</FormLabel>
+              <FormControl>
+                <Input {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+          Create Car
+        </Button>
+      </form>
+    </Form>
+  );
+}
+
+function ShopForm({ onSubmit }: { onSubmit: (data: InsertShopItem) => void }) {
+  const form = useForm<InsertShopItem>({
+    resolver: zodResolver(insertShopItemSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      price: "",
+      category: "sim-related",
+      imageUrl: "",
+      isActive: true,
+    },
+  });
+
+  const handleSubmit = (data: InsertShopItem) => {
+    onSubmit(data);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Product Name</FormLabel>
+              <FormControl>
+                <Input {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Price</FormLabel>
+              <FormControl>
+                <Input {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Category</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="bg-gray-700 border-gray-600">
+                  <SelectItem value="sim-related">Sim-Related</SelectItem>
+                  <SelectItem value="non-sim-related">Non-Sim Related</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white">Description</FormLabel>
+              <FormControl>
+                <Textarea {...field} className="bg-gray-700 border-gray-600 text-white" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+          Create Product
+        </Button>
+      </form>
+    </Form>
+  );
+}
 
 export default function Admin() {
   const { toast } = useToast();
   const { isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("servers");
+  const [showServerForm, setShowServerForm] = useState(false);
+  const [showCarForm, setShowCarForm] = useState(false);
+  const [showShopForm, setShowShopForm] = useState(false);
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -139,6 +410,61 @@ export default function Admin() {
     },
   });
 
+  // Create mutations
+  const createServerMutation = useMutation({
+    mutationFn: async (data: any) => {
+      await apiRequest("POST", "/api/servers", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/servers"] });
+      toast({ title: "Success", description: "Server created successfully" });
+      setShowServerForm(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to create server",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const createCarMutation = useMutation({
+    mutationFn: async (data: any) => {
+      await apiRequest("POST", "/api/cars", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/cars"] });
+      toast({ title: "Success", description: "Car created successfully" });
+      setShowCarForm(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to create car",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const createShopItemMutation = useMutation({
+    mutationFn: async (data: any) => {
+      await apiRequest("POST", "/api/shop", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/shop"] });
+      toast({ title: "Success", description: "Shop item created successfully" });
+      setShowShopForm(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to create shop item",
+        variant: "destructive",
+      });
+    },
+  });
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center">
@@ -203,10 +529,20 @@ export default function Admin() {
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between">
                   Server Management
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Server
-                  </Button>
+                  <Dialog open={showServerForm} onOpenChange={setShowServerForm}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Server
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-gray-800 border-gray-700">
+                      <DialogHeader>
+                        <DialogTitle className="text-white">Add New Server</DialogTitle>
+                      </DialogHeader>
+                      <ServerForm onSubmit={createServerMutation.mutate} />
+                    </DialogContent>
+                  </Dialog>
                 </CardTitle>
               </CardHeader>
               <CardContent>
