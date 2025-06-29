@@ -167,7 +167,7 @@ export default function Admin() {
           
           <div className="flex flex-wrap gap-3">
             <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/50">
-              <Server className="h-3 w-3 mr-1" />
+              <ServerIcon className="h-3 w-3 mr-1" />
               {servers.length} Servers
             </Badge>
             <Badge className="bg-red-500/20 text-red-400 border-red-500/50">
@@ -184,7 +184,7 @@ export default function Admin() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-3 bg-gray-800 mb-8">
             <TabsTrigger value="servers" className="data-[state=active]:bg-blue-600">
-              <Server className="h-4 w-4 mr-2" />
+              <ServerIcon className="h-4 w-4 mr-2" />
               Servers
             </TabsTrigger>
             <TabsTrigger value="cars" className="data-[state=active]:bg-red-600">
