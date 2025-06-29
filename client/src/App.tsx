@@ -11,6 +11,7 @@ import Cars from "@/pages/cars";
 import Discord from "@/pages/discord";
 import Shop from "@/pages/shop";
 import Admin from "@/pages/admin";
+import Login from "@/pages/login";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -29,6 +30,7 @@ function Router() {
           <Route path="/cars" component={Cars} />
           <Route path="/discord" component={Discord} />
           <Route path="/shop" component={Shop} />
+          <Route path="/login" component={Login} />
         </>
       ) : (
         <>
