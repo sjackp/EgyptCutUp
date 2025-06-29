@@ -159,6 +159,24 @@ export const insertDiscordStatsSchema = createInsertSchema(discordStats).omit({
   lastUpdated: true,
 });
 
+export const insertVipTierSchema = createInsertSchema(vipTiers).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertPromoCodeSchema = createInsertSchema(promoCodes).omit({
+  id: true,
+  usedCount: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertSiteSettingSchema = createInsertSchema(siteSettings).omit({
+  id: true,
+  updatedAt: true,
+});
+
 // Types
 export type Admin = typeof admins.$inferSelect;
 export type InsertAdmin = typeof admins.$inferInsert;
@@ -174,3 +192,12 @@ export type InsertShopItem = z.infer<typeof insertShopItemSchema>;
 
 export type DiscordStats = typeof discordStats.$inferSelect;
 export type InsertDiscordStats = z.infer<typeof insertDiscordStatsSchema>;
+
+export type VipTier = typeof vipTiers.$inferSelect;
+export type InsertVipTier = z.infer<typeof insertVipTierSchema>;
+
+export type PromoCode = typeof promoCodes.$inferSelect;
+export type InsertPromoCode = z.infer<typeof insertPromoCodeSchema>;
+
+export type SiteSetting = typeof siteSettings.$inferSelect;
+export type InsertSiteSetting = z.infer<typeof insertSiteSettingSchema>;
