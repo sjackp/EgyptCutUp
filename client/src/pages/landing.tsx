@@ -88,85 +88,111 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-16 px-4 bg-dark-card/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">Why Choose EGCU?</h2>
-            <p className="text-gray-400 text-lg">The ultimate Assetto Corsa experience in the MENA region</p>
+      {/* Premium Features */}
+      <section className="py-24 px-4 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-midnight via-charcoal to-midnight opacity-50"></div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl font-light tracking-tight luxury-text mb-6">Excellence in Racing</h2>
+            <div className="w-16 h-0.5 bg-electric-blue mx-auto mb-6"></div>
+            <p className="text-silver text-xl max-w-3xl mx-auto leading-relaxed">
+              Experience the pinnacle of virtual motorsport with cutting-edge technology and unmatched community engagement
+            </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-racing-red rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-white" />
+          <div className="grid md:grid-cols-3 gap-12">
+            <div className="text-center premium-card">
+              <div className="w-20 h-20 bg-electric-blue rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-electric-blue">
+                <Users className="h-10 w-10 text-midnight" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Massive Community</h3>
-              <p className="text-gray-400">Join thousands of racing enthusiasts from across Egypt and the Middle East</p>
+              <h3 className="text-2xl font-light text-platinum mb-4 tracking-wide">Elite Community</h3>
+              <p className="text-silver leading-relaxed">
+                Connect with MENA's most passionate racing enthusiasts in an exclusive environment designed for serious competitors
+              </p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gold-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                <Play className="h-8 w-8 text-dark-bg" />
+            <div className="text-center premium-card">
+              <div className="w-20 h-20 bg-amber rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-amber">
+                <Play className="h-10 w-10 text-midnight" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Premium Servers</h3>
-              <p className="text-gray-400">High-performance dedicated servers across multiple regions for optimal gameplay</p>
+              <h3 className="text-2xl font-light text-platinum mb-4 tracking-wide">Enterprise Infrastructure</h3>
+              <p className="text-silver leading-relaxed">
+                High-performance dedicated servers with enterprise-grade hardware delivering ultra-low latency across multiple regions
+              </p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <SiDiscord className="h-8 w-8 text-white" />
+            <div className="text-center premium-card">
+              <div className="w-20 h-20 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-green-500">
+                <SiDiscord className="h-10 w-10 text-midnight" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Active Discord</h3>
-              <p className="text-gray-400">24/7 community chat, events, tournaments, and exclusive content sharing</p>
+              <h3 className="text-2xl font-light text-platinum mb-4 tracking-wide">24/7 Engagement</h3>
+              <p className="text-silver leading-relaxed">
+                Round-the-clock community interaction with exclusive events, championships, and premium content access
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-dark-card border-t border-dark-border py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
+      {/* Premium Footer */}
+      <footer className="relative py-20 px-4 border-t border-white/10">
+        <div className="absolute inset-0 bg-gradient-to-t from-midnight to-charcoal opacity-80"></div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
-              <h3 className="text-xl font-bold text-racing-red mb-4">EGCU</h3>
-              <p className="text-gray-400 text-sm mb-4">Egypt Cut Up - MENA's premier racing community since March 2022</p>
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-8 h-8 bg-electric-blue rounded-lg flex items-center justify-center">
+                  <span className="text-midnight font-bold">E</span>
+                </div>
+                <h3 className="text-2xl font-light luxury-text">EGCU</h3>
+              </div>
+              <p className="text-silver text-sm leading-relaxed mb-6">
+                Egypt Cut Up - MENA's premier racing community delivering unparalleled virtual motorsport experiences since March 2022
+              </p>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <a href="#" className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center text-silver hover:bg-electric-blue hover:text-midnight transition-all duration-300">
                   <SiDiscord className="h-5 w-5" />
                 </a>
               </div>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li><Link href="/servers" className="hover:text-white transition-colors">Servers</Link></li>
-                <li><Link href="/cars" className="hover:text-white transition-colors">Car Collection</Link></li>
-                <li><Link href="/discord" className="hover:text-white transition-colors">Discord</Link></li>
-                <li><Link href="/shop" className="hover:text-white transition-colors">Shop</Link></li>
+              <h4 className="text-platinum font-medium mb-6 tracking-wide">Navigation</h4>
+              <ul className="space-y-3">
+                <li><Link href="/servers" className="text-silver hover:text-electric-blue transition-colors text-sm">Server Status</Link></li>
+                <li><Link href="/cars" className="text-silver hover:text-electric-blue transition-colors text-sm">Vehicle Collection</Link></li>
+                <li><Link href="/discord" className="text-silver hover:text-electric-blue transition-colors text-sm">Community Hub</Link></li>
+                <li><Link href="/shop" className="text-silver hover:text-electric-blue transition-colors text-sm">Premium Store</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Community</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">Rules & Guidelines</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Support</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+              <h4 className="text-platinum font-medium mb-6 tracking-wide">Support</h4>
+              <ul className="space-y-3 text-silver text-sm">
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Racing Guidelines</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Technical Support</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">FAQ & Guides</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Contact Team</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Statistics</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li>11,000+ Discord Members</li>
-                <li>500+ Active Daily</li>
-                <li>50+ Car Mods</li>
-                <li>3 Regional Servers</li>
+              <h4 className="text-platinum font-medium mb-6 tracking-wide">Performance</h4>
+              <ul className="space-y-3 text-silver text-sm">
+                <li>11,000+ Community Members</li>
+                <li>500+ Daily Active Users</li>
+                <li>50+ Custom Vehicles</li>
+                <li>24/7 Server Availability</li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-dark-border mt-8 pt-8 text-center text-gray-400 text-sm">
-            <p>&copy; 2024 Egypt Cut Up (EGCU). All rights reserved. | Powered by the MENA racing community</p>
+          
+          <div className="border-t border-white/10 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-silver text-sm">
+                © 2024 Egypt Cut Up Racing Community. All rights reserved.
+              </p>
+              <p className="text-silver text-sm mt-4 md:mt-0">
+                Powered by passion for automotive excellence
+              </p>
+            </div>
           </div>
         </div>
       </footer>

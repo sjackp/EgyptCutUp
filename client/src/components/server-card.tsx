@@ -12,77 +12,78 @@ export default function ServerCard({ server }: ServerCardProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "online":
-        return "bg-green-500";
+        return "server-status-online";
       case "offline":
-        return "bg-red-500";
+        return "server-status-offline";
       case "maintenance":
-        return "bg-yellow-500";
+        return "server-status-maintenance";
       default:
         return "bg-gray-500";
     }
   };
 
   const getCapacityPercentage = () => {
-    if (server.maxPlayers === 0) return 0;
-    return (server.currentPlayers / server.maxPlayers) * 100;
+    if (!server.maxPlayers || server.maxPlayers === 0) return 0;
+    return ((server.currentPlayers || 0) / server.maxPlayers) * 100;
   };
 
   const isServerAvailable = server.status === "online";
 
   return (
-    <div className="server-card">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-semibold text-white">{server.name}</h3>
-        <Badge className={`${getStatusColor(server.status)} text-white`}>
-          <div className="w-2 h-2 rounded-full bg-white mr-1" />
-          {server.status.charAt(0).toUpperCase() + server.status.slice(1)}
-        </Badge>
+    <div className="premium-card group">
+      <div className="flex items-start justify-between mb-6">
+        <div>
+          <h3 className="text-2xl font-light text-platinum mb-2 tracking-wide">{server.name}</h3>
+          <p className="text-silver text-sm uppercase tracking-wider">{server.region}</p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <div className={`w-4 h-4 rounded-full ${getStatusColor(server.status)} animate-pulse`}></div>
+          <span className="text-sm font-medium text-platinum capitalize tracking-wide">{server.status}</span>
+        </div>
       </div>
       
-      <div className="space-y-3">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center text-gray-400">
+      <div className="space-y-4">
+        <div className="flex justify-between items-center py-2">
+          <div className="flex items-center text-silver">
             <Users className="h-4 w-4 mr-2" />
-            <span>Players:</span>
+            <span className="text-sm tracking-wide">Capacity</span>
           </div>
-          <span className="text-white font-medium">
-            {server.currentPlayers}/{server.maxPlayers}
-          </span>
+          <span className="text-platinum font-medium text-lg">{server.currentPlayers}/{server.maxPlayers}</span>
         </div>
         
-        <div className="flex justify-between items-center">
-          <div className="flex items-center text-gray-400">
-            <MapPin className="h-4 w-4 mr-2" />
-            <span>Region:</span>
-          </div>
-          <span className="text-white">{server.region}</span>
+        <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+          <div 
+            className="bg-electric-blue h-2 rounded-full transition-all duration-500 ease-out shadow-electric-blue"
+            style={{ width: `${getCapacityPercentage()}%` }}
+          ></div>
         </div>
         
         {server.track && (
-          <div className="flex justify-between items-center">
-            <div className="flex items-center text-gray-400">
+          <div className="flex justify-between items-center py-2">
+            <div className="flex items-center text-silver">
               <Gamepad2 className="h-4 w-4 mr-2" />
-              <span>Track:</span>
+              <span className="text-sm tracking-wide">Circuit</span>
             </div>
-            <span className={`${isServerAvailable ? "text-white" : "text-gray-500"}`}>
-              {server.track}
-            </span>
+            <span className="text-amber font-medium">{server.track}</span>
           </div>
         )}
         
-        <div className="w-full">
-          <Progress 
-            value={getCapacityPercentage()} 
-            className="h-2"
-          />
-        </div>
+        {server.gameMode && (
+          <div className="flex justify-between items-center py-2">
+            <div className="flex items-center text-silver">
+              <MapPin className="h-4 w-4 mr-2" />
+              <span className="text-sm tracking-wide">Game Mode</span>
+            </div>
+            <span className="text-platinum">{server.gameMode}</span>
+          </div>
+        )}
       </div>
       
       <Button
-        className={`w-full mt-4 font-medium transition-colors ${
+        className={`w-full mt-6 rounded-full py-3 font-medium tracking-wide transition-all duration-300 ${
           isServerAvailable
-            ? "bg-racing-red hover:bg-red-700 text-white"
-            : "bg-gray-600 text-gray-400 cursor-not-allowed"
+            ? "btn-primary"
+            : "bg-white/5 text-silver cursor-not-allowed hover:bg-white/5"
         }`}
         disabled={!isServerAvailable}
         onClick={() => {
@@ -91,7 +92,7 @@ export default function ServerCard({ server }: ServerCardProps) {
           }
         }}
       >
-        {isServerAvailable ? "Join Server" : "Server Offline"}
+        {isServerAvailable ? "Enter Server" : "Server Offline"}
       </Button>
     </div>
   );

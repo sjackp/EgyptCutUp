@@ -11,11 +11,11 @@ export default function CarCard({ car }: CarCardProps) {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "new":
-        return "bg-racing-red text-white";
+        return "bg-electric-blue text-midnight";
       case "exclusive":
-        return "bg-gold-accent text-dark-bg";
+        return "bg-amber text-midnight";
       default:
-        return "bg-gray-600 text-white";
+        return "bg-white/20 text-platinum";
     }
   };
 
