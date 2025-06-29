@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(0, 84.2%, 60.2%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Racing theme colors */
+  --racing-red: hsl(0, 84.2%, 60.2%);
+  --gold-accent: hsl(45, 93.4%, 47.5%);
+  --dark-bg: hsl(0, 0%, 10.2%);
+  --dark-card: hsl(0, 0%, 14.9%);
+  --dark-border: hsl(217, 10%, 25.5%);
+}
+
+.dark {
+  --background: hsl(0, 0%, 10.2%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(0, 0%, 14.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(0, 0%, 14.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(217, 10%, 25.5%);
+  --input: hsl(217, 10%, 25.5%);
+  --primary: hsl(0, 84.2%, 60.2%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    background-color: var(--dark-bg);
+    color: hsl(0, 0%, 98%);
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .racing-gradient {
+    background: linear-gradient(135deg, var(--racing-red) 0%, var(--gold-accent) 100%);
+  }
+  
+  .hero-bg {
+    background-image: linear-gradient(
+      135deg,
+      rgba(10, 10, 10, 0.9) 0%,
+      rgba(220, 38, 38, 0.1) 50%,
+      rgba(10, 10, 10, 0.9) 100%
+    );
+  }
+  
+  .nav-link {
+    @apply transition-colors duration-200;
+  }
+  
+  .nav-link:hover {
+    @apply text-white;
+    background-color: var(--dark-border);
+  }
+  
+  .nav-link.active {
+    background-color: var(--racing-red);
+    @apply text-white;
+  }
+  
+  .server-card {
+    @apply bg-card border border-border rounded-lg p-6 hover:border-primary transition-colors;
+    background-color: var(--dark-card);
+    border-color: var(--dark-border);
+  }
+  
+  .server-card:hover {
+    border-color: var(--racing-red);
+  }
+  
+  .car-card {
+    @apply bg-card border border-border rounded-lg overflow-hidden hover:border-accent transition-colors group;
+    background-color: var(--dark-card);
+    border-color: var(--dark-border);
+  }
+  
+  .car-card:hover {
+    border-color: var(--gold-accent);
+  }
+  
+  .filter-btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors;
+  }
+  
+  .filter-btn.active {
+    background-color: var(--racing-red);
+    @apply text-white;
+  }
+  
+  .filter-btn:not(.active) {
+    background-color: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    @apply text-gray-300 hover:text-white;
+  }
+  
+  .admin-tab {
+    @apply p-4 rounded-lg font-semibold transition-colors;
+  }
+  
+  .admin-tab.active {
+    background-color: var(--racing-red);
+    @apply text-white;
+  }
+  
+  .admin-tab:not(.active) {
+    background-color: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    @apply text-gray-300;
+  }
+  
+  .btn-primary {
+    background-color: var(--racing-red);
+    @apply text-white hover:opacity-90 transition-opacity;
+  }
+  
+  .btn-secondary {
+    background-color: var(--gold-accent);
+    color: var(--dark-bg);
+    @apply hover:opacity-90 transition-opacity;
+  }
+  
+  .discord-gradient {
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+  }
+}
+
+@layer utilities {
+  .text-racing-red {
+    color: var(--racing-red);
+  }
+  
+  .text-gold-accent {
+    color: var(--gold-accent);
+  }
+  
+  .bg-racing-red {
+    background-color: var(--racing-red);
+  }
+  
+  .bg-gold-accent {
+    background-color: var(--gold-accent);
+  }
+  
+  .bg-dark-bg {
+    background-color: var(--dark-bg);
+  }
+  
+  .bg-dark-card {
+    background-color: var(--dark-card);
+  }
+  
+  .border-dark-border {
+    border-color: var(--dark-border);
+  }
+}
