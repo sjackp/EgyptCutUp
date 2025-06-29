@@ -31,8 +31,6 @@ export function getSession() {
 
 export async function setupAuth(app: Express) {
   app.set("trust proxy", 1);
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.json());
   app.use(getSession());
   app.use(passport.initialize());
   app.use(passport.session());
@@ -70,7 +68,11 @@ export async function setupAuth(app: Express) {
 
   // Login route
   app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
+    console.log("Login attempt - raw body:", req.body);
+    console.log("Content-Type:", req.headers['content-type']);
+    console.log("Request method:", req.method);
+    
+    passport.authenticate("local", (err: any, user: any, info: any) => {
       if (err) {
         console.error("Login error:", err);
         return res.status(500).json({ error: "Authentication failed" });

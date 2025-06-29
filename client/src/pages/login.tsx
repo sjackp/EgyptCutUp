@@ -17,13 +17,15 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("username", username);
-      formData.append("password", password);
-
       const response = await fetch("/api/login", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
         credentials: "include",
       });
 
