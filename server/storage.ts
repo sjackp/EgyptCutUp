@@ -1,11 +1,11 @@
 import {
-  users,
+  admins,
   servers,
   cars,
   shopItems,
   discordStats,
-  type User,
-  type UpsertUser,
+  type Admin,
+  type InsertAdmin,
   type Server,
   type InsertServer,
   type Car,
@@ -20,9 +20,8 @@ import { eq, desc, and } from "drizzle-orm";
 
 // Interface for storage operations
 export interface IStorage {
-  // User operations (mandatory for Replit Auth)
-  getUser(id: string): Promise<User | undefined>;
-  upsertUser(user: UpsertUser): Promise<User>;
+  // Admin operations
+  getAdminByUsername(username: string): Promise<Admin | undefined>;
   
   // Server operations
   getServers(): Promise<Server[]>;
@@ -52,25 +51,10 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  // User operations (mandatory for Replit Auth)
-  async getUser(id: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user;
-  }
-
-  async upsertUser(userData: UpsertUser): Promise<User> {
-    const [user] = await db
-      .insert(users)
-      .values(userData)
-      .onConflictDoUpdate({
-        target: users.id,
-        set: {
-          ...userData,
-          updatedAt: new Date(),
-        },
-      })
-      .returning();
-    return user;
+  // Admin operations
+  async getAdminByUsername(username: string): Promise<Admin | undefined> {
+    const [admin] = await db.select().from(admins).where(eq(admins.username, username));
+    return admin;
   }
 
   // Server operations
