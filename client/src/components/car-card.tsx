@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Car } from "@shared/schema";
-import { Download } from "lucide-react";
+import { Download, Gauge, Zap, Weight, Timer } from "lucide-react";
 
 interface CarCardProps {
   car: Car;
@@ -30,7 +30,7 @@ export default function CarCard({ car }: CarCardProps) {
       <div className="relative">
         <div className="aspect-video overflow-hidden rounded-t-xl">
           <img
-            src={car.imageUrl || "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"}
+            src={car.thumbnail || "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"}
             alt={car.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
           />
@@ -46,12 +46,54 @@ export default function CarCard({ car }: CarCardProps) {
       <div className="p-6">
         <div className="mb-4">
           <h3 className="text-xl font-light text-platinum mb-2 tracking-wide">{car.name}</h3>
-          <p className="text-amber font-medium text-sm uppercase tracking-wider">{car.make}</p>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-amber font-medium text-sm uppercase tracking-wider">{car.make}</p>
+            <p className="text-silver text-sm font-medium">{car.year}</p>
+          </div>
         </div>
         
-        {car.description && (
-          <p className="text-silver text-sm mb-6 leading-relaxed line-clamp-2">{car.description}</p>
-        )}
+        {/* Performance Specifications */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+            <div className="flex items-center gap-2 mb-1">
+              <Zap className="h-4 w-4 text-amber" />
+              <span className="text-silver text-xs uppercase tracking-wide">Power</span>
+            </div>
+            <p className="text-platinum font-medium">{car.horsepower || 'N/A'} HP</p>
+          </div>
+          
+          <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+            <div className="flex items-center gap-2 mb-1">
+              <Gauge className="h-4 w-4 text-amber" />
+              <span className="text-silver text-xs uppercase tracking-wide">Torque</span>
+            </div>
+            <p className="text-platinum font-medium">{car.torque || 'N/A'} Nm</p>
+          </div>
+          
+          <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+            <div className="flex items-center gap-2 mb-1">
+              <Weight className="h-4 w-4 text-amber" />
+              <span className="text-silver text-xs uppercase tracking-wide">Weight</span>
+            </div>
+            <p className="text-platinum font-medium">{car.weight || 'N/A'} kg</p>
+          </div>
+          
+          <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+            <div className="flex items-center gap-2 mb-1">
+              <Timer className="h-4 w-4 text-amber" />
+              <span className="text-silver text-xs uppercase tracking-wide">0-100</span>
+            </div>
+            <p className="text-platinum font-medium">{car.acceleration || 'N/A'}s</p>
+          </div>
+        </div>
+        
+        {/* Max Speed */}
+        <div className="bg-gradient-to-r from-amber/20 to-electric-blue/20 rounded-lg p-3 mb-6 border border-amber/30">
+          <div className="text-center">
+            <p className="text-amber text-xs uppercase tracking-wide mb-1">Top Speed</p>
+            <p className="text-platinum text-lg font-medium">{car.maxSpeed || 'N/A'} km/h</p>
+          </div>
+        </div>
         
         <Button
           onClick={handleDownload}
