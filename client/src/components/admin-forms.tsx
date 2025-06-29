@@ -218,8 +218,14 @@ export function CarForm({ onSuccess }: { onSuccess: () => void }) {
     defaultValues: {
       name: "",
       make: "",
+      year: new Date().getFullYear(),
+      thumbnail: "",
       description: "",
-      imageUrl: "",
+      horsepower: undefined,
+      torque: undefined,
+      weight: undefined,
+      maxSpeed: undefined,
+      acceleration: undefined,
       downloadLink: "",
       category: "standard",
       isActive: true,
@@ -263,7 +269,7 @@ export function CarForm({ onSuccess }: { onSuccess: () => void }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="name"
@@ -303,13 +309,57 @@ export function CarForm({ onSuccess }: { onSuccess: () => void }) {
                     <SelectItem value="Porsche">Porsche</SelectItem>
                     <SelectItem value="Lamborghini">Lamborghini</SelectItem>
                     <SelectItem value="McLaren">McLaren</SelectItem>
+                    <SelectItem value="Ford">Ford</SelectItem>
+                    <SelectItem value="Chevrolet">Chevrolet</SelectItem>
+                    <SelectItem value="Nissan">Nissan</SelectItem>
+                    <SelectItem value="Toyota">Toyota</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="year"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-300">Year</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    min="1900"
+                    max={new Date().getFullYear() + 5}
+                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
+
+        <FormField
+          control={form.control}
+          name="thumbnail"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-gray-300">Thumbnail URL</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="url"
+                  placeholder="https://..."
+                  className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -330,24 +380,110 @@ export function CarForm({ onSuccess }: { onSuccess: () => void }) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="imageUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-300">Image URL</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="url"
-                  placeholder="https://..."
-                  className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid md:grid-cols-3 gap-4">
+          <FormField
+            control={form.control}
+            name="horsepower"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-300">Horsepower (HP)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    min="0"
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                    className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="torque"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-300">Torque (Nm)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    min="0"
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                    className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="weight"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-300">Weight (kg)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    min="0"
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                    className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="maxSpeed"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-300">Max Speed (km/h)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    min="0"
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                    className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="acceleration"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-300">0-100 km/h (seconds)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}
