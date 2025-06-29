@@ -25,16 +25,25 @@ export default function Login() {
         method: "POST",
         body: formData,
         credentials: "include",
-        redirect: "manual", // Handle redirect manually
       });
 
-      if (response.status === 302 || response.ok) {
-        // Login successful, force a page reload to refresh authentication state
-        window.location.href = "/";
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          // Login successful, force a page reload to refresh authentication state
+          window.location.href = "/";
+        } else {
+          toast({
+            title: "Login Failed",
+            description: "Authentication failed",
+            variant: "destructive",
+          });
+        }
       } else {
+        const error = await response.json().catch(() => ({ error: "Unknown error" }));
         toast({
           title: "Login Failed",
-          description: "Invalid username or password",
+          description: error.error || "Invalid username or password",
           variant: "destructive",
         });
       }

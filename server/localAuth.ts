@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
-import type { Express, RequestHandler } from "express";
+import express, { type Express, type RequestHandler } from "express";
 import connectPg from "connect-pg-simple";
 import bcrypt from "bcrypt";
 import { storage } from "./storage";
@@ -31,6 +31,8 @@ export function getSession() {
 
 export async function setupAuth(app: Express) {
   app.set("trust proxy", 1);
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
   app.use(getSession());
   app.use(passport.initialize());
   app.use(passport.session());
@@ -67,10 +69,27 @@ export async function setupAuth(app: Express) {
   });
 
   // Login route
-  app.post("/api/login", passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login?error=invalid",
-  }));
+  app.post("/api/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        console.error("Login error:", err);
+        return res.status(500).json({ error: "Authentication failed" });
+      }
+      if (!user) {
+        console.log("Login failed:", info?.message);
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error("Session login error:", err);
+          return res.status(500).json({ error: "Session failed" });
+        }
+        console.log("Login successful for user:", user.username);
+        return res.json({ success: true, user: { id: user.id, username: user.username } });
+      });
+    })(req, res, next);
+  });
 
   // Logout route
   app.post("/api/logout", (req, res) => {
