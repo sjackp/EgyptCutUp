@@ -4,12 +4,7 @@ import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import connectPg from "connect-pg-simple";
 import bcrypt from "bcrypt";
-
-// Simple admin credentials - in production, this would be from database
-const ADMIN_CREDENTIALS = {
-  username: "admin",
-  password: "$2b$10$8K1p/a4l5N3/y4x7FVgUDeZOGfhCv9d0Q1xz2Y/ZhOL4FnQWJ1.6u" // hashed "admin123"
-};
+import { storage } from "./storage";
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
@@ -44,10 +39,11 @@ export async function setupAuth(app: Express) {
   passport.use(new LocalStrategy(
     async (username: string, password: string, done) => {
       try {
-        if (username === ADMIN_CREDENTIALS.username) {
-          const isValid = await bcrypt.compare(password, ADMIN_CREDENTIALS.password);
+        const admin = await storage.getAdminByUsername(username);
+        if (admin) {
+          const isValid = await bcrypt.compare(password, admin.password);
           if (isValid) {
-            return done(null, { id: 1, username: "admin", role: "admin" });
+            return done(null, { id: admin.id, username: admin.username, role: "admin" });
           }
         }
         return done(null, false, { message: "Invalid credentials" });
@@ -61,9 +57,13 @@ export async function setupAuth(app: Express) {
     done(null, user.id);
   });
 
-  passport.deserializeUser((id: number, done) => {
-    // Simple user object for admin
-    done(null, { id: 1, username: "admin", role: "admin" });
+  passport.deserializeUser(async (id: number, done) => {
+    try {
+      // Return basic admin object - could fetch from DB if needed
+      done(null, { id, username: "admin", role: "admin" });
+    } catch (error) {
+      done(error);
+    }
   });
 
   // Login route
