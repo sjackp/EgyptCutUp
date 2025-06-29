@@ -39,15 +39,21 @@ export async function setupAuth(app: Express) {
   passport.use(new LocalStrategy(
     async (username: string, password: string, done) => {
       try {
+        console.log("Auth strategy - username:", username);
+        console.log("Auth strategy - password:", password);
         const admin = await storage.getAdminByUsername(username);
+        console.log("Found admin:", admin ? 'yes' : 'no');
         if (admin) {
+          console.log("Stored hash:", admin.password);
           const isValid = await bcrypt.compare(password, admin.password);
+          console.log("Password valid:", isValid);
           if (isValid) {
             return done(null, { id: admin.id, username: admin.username, role: "admin" });
           }
         }
         return done(null, false, { message: "Invalid credentials" });
       } catch (error) {
+        console.error("Auth strategy error:", error);
         return done(error);
       }
     }
