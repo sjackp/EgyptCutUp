@@ -4,17 +4,16 @@ export function useAuth() {
   const { data: user, isLoading, error } = useQuery({
     queryKey: ["/api/auth/user"],
     retry: false,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchInterval: false,
-    staleTime: Infinity,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
     queryFn: async () => {
       const res = await fetch("/api/auth/user", {
         credentials: "include",
       });
       
       if (res.status === 401) {
-        return null; // User is not authenticated, return null instead of throwing
+        return null;
       }
       
       if (!res.ok) {

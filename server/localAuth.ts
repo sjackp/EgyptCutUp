@@ -16,8 +16,8 @@ export function getSession() {
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
     conString: process.env.DATABASE_URL,
-    createTableIfMissing: false,
-    ttl: sessionTtl,
+    createTableIfMissing: true,
+    ttl: sessionTtl / 1000, // Convert to seconds for pg store
     tableName: "sessions",
   });
   return session({
@@ -27,8 +27,9 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false, // Set to true in production with HTTPS
+      secure: false,
       maxAge: sessionTtl,
+      sameSite: 'lax',
     },
   });
 }
@@ -83,6 +84,7 @@ export async function setupAuth(app: Express) {
 
   // Check auth status
   app.get("/api/auth/user", (req, res) => {
+    console.log("Auth check - isAuthenticated:", req.isAuthenticated(), "user:", req.user);
     if (req.isAuthenticated()) {
       res.json(req.user);
     } else {

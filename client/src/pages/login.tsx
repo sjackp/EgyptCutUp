@@ -24,9 +24,12 @@ export default function Login() {
       const response = await fetch("/api/login", {
         method: "POST",
         body: formData,
+        credentials: "include",
+        redirect: "manual", // Handle redirect manually
       });
 
-      if (response.redirected) {
+      if (response.status === 302 || response.ok) {
+        // Login successful, force a page reload to refresh authentication state
         window.location.href = "/";
       } else {
         toast({
