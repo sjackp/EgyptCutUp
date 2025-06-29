@@ -19,26 +19,31 @@ export default function Navigation() {
   const isActive = (href: string) => location === href || (href === "/" && location === "/");
 
   return (
-    <nav className="bg-dark-card border-b border-dark-border sticky top-0 z-50">
+    <nav className="glass-card border-b border-white/10 sticky top-0 z-50 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0">
-              <div>
-                <h1 className="text-2xl font-bold text-racing-red">EGCU</h1>
-                <p className="text-xs text-gold-accent">Egypt Cut Up</p>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-electric-blue rounded-lg flex items-center justify-center">
+                  <span className="text-midnight font-bold text-lg">E</span>
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold luxury-text">EGCU</h1>
+                  <p className="text-xs text-silver tracking-wider">EGYPT CUT UP</p>
+                </div>
               </div>
             </Link>
-            <div className="hidden md:block ml-10">
-              <div className="flex items-baseline space-x-4">
+            <div className="hidden md:block ml-12">
+              <div className="flex items-center space-x-8">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`nav-link px-3 py-2 rounded-md text-sm font-medium ${
+                    className={`nav-link px-4 py-2 text-sm font-medium tracking-wide ${
                       isActive(item.href)
-                        ? "bg-racing-red text-white"
-                        : "text-gray-300 hover:bg-dark-border hover:text-white"
+                        ? "active text-electric-blue"
+                        : "text-platinum hover:text-electric-blue"
                     }`}
                   >
                     {item.label}
@@ -47,10 +52,10 @@ export default function Navigation() {
                 {isAuthenticated && (
                   <Link
                     href="/admin"
-                    className={`nav-link px-3 py-2 rounded-md text-sm font-medium ${
+                    className={`nav-link px-4 py-2 text-sm font-medium tracking-wide ${
                       isActive("/admin")
-                        ? "bg-racing-red text-white"
-                        : "text-gray-300 hover:bg-dark-border hover:text-white"
+                        ? "active text-electric-blue"
+                        : "text-platinum hover:text-electric-blue"
                     }`}
                   >
                     Admin
@@ -64,20 +69,20 @@ export default function Navigation() {
             {!isAuthenticated ? (
               <Button
                 onClick={() => window.location.href = "/api/login"}
-                className="bg-gold-accent text-dark-bg hover:bg-yellow-500"
+                className="btn-primary px-6 py-2.5 rounded-full font-medium"
               >
                 <User className="h-4 w-4 mr-2" />
-                Admin Login
+                Admin Access
               </Button>
             ) : (
               <div className="flex items-center space-x-4">
-                <span className="text-gray-300 text-sm">
-                  Welcome, {user?.firstName || user?.email || 'Admin'}
+                <span className="text-platinum text-sm font-medium">
+                  {user?.firstName || user?.email || 'Admin'}
                 </span>
                 <Button
                   onClick={() => window.location.href = "/api/logout"}
                   variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  className="border-white/20 text-platinum hover:bg-white/10 rounded-full px-4 py-2"
                 >
                   Logout
                 </Button>
@@ -90,7 +95,7 @@ export default function Navigation() {
               variant="ghost"
               size="sm"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-400 hover:text-white"
+              className="text-platinum hover:text-electric-blue"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -101,15 +106,15 @@ export default function Navigation() {
       {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-dark-card border-t border-dark-border">
+          <div className="px-4 pt-4 pb-6 space-y-3 glass-card border-t border-white/10">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 ${
                   isActive(item.href)
-                    ? "bg-racing-red text-white"
-                    : "text-gray-300 hover:bg-dark-border hover:text-white"
+                    ? "bg-electric-blue text-midnight"
+                    : "text-platinum hover:bg-white/10 hover:text-electric-blue"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -119,32 +124,32 @@ export default function Navigation() {
             {isAuthenticated && (
               <Link
                 href="/admin"
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 ${
                   isActive("/admin")
-                    ? "bg-racing-red text-white"
-                    : "text-gray-300 hover:bg-dark-border hover:text-white"
+                    ? "bg-electric-blue text-midnight"
+                    : "text-platinum hover:bg-white/10 hover:text-electric-blue"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Admin
               </Link>
             )}
-            <div className="pt-4 border-t border-dark-border">
+            <div className="pt-4 border-t border-white/10">
               {!isAuthenticated ? (
                 <Button
                   onClick={() => {
                     window.location.href = "/api/login";
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full bg-gold-accent text-dark-bg hover:bg-yellow-500"
+                  className="w-full btn-primary rounded-xl py-3"
                 >
                   <User className="h-4 w-4 mr-2" />
-                  Admin Login
+                  Admin Access
                 </Button>
               ) : (
-                <div className="space-y-2">
-                  <p className="text-gray-300 text-sm px-3">
-                    Welcome, {user?.firstName || user?.email || 'Admin'}
+                <div className="space-y-3">
+                  <p className="text-platinum text-sm px-4 font-medium">
+                    {user?.firstName || user?.email || 'Admin'}
                   </p>
                   <Button
                     onClick={() => {
@@ -152,7 +157,7 @@ export default function Navigation() {
                       setIsMobileMenuOpen(false);
                     }}
                     variant="outline"
-                    className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                    className="w-full border-white/20 text-platinum hover:bg-white/10 rounded-xl py-3"
                   >
                     Logout
                   </Button>

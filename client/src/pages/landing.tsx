@@ -6,63 +6,83 @@ import { SiDiscord } from "react-icons/si";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-dark-bg text-gray-100">
+    <div className="min-h-screen text-platinum">
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative h-96 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-dark-bg via-transparent to-dark-bg z-10"></div>
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden hero-section">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-midnight/50 to-midnight z-10"></div>
         <div 
-          className="absolute inset-0"
+          className="absolute inset-0 opacity-30"
           style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080')",
             backgroundSize: "cover",
-            backgroundPosition: "center"
+            backgroundPosition: "center",
+            filter: "brightness(0.4) contrast(1.2)"
           }}
         />
         
-        <div className="relative z-20 text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
-            Egypt <span className="text-racing-red">Cut Up</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gold-accent mb-2">🏁 MENA's Premier Racing Community</p>
-          <p className="text-gray-300 text-lg mb-8">11,000+ Members | 500+ Active Online | Since March 2022</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="relative z-20 text-center px-4 max-w-5xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-6xl md:text-8xl font-light tracking-tight mb-6">
+              <span className="luxury-text">Egypt</span>
+              <br />
+              <span className="text-electric-blue font-bold">Cut Up</span>
+            </h1>
+            <div className="w-24 h-1 bg-electric-blue mx-auto mb-8"></div>
+            <p className="text-2xl md:text-3xl text-amber font-light mb-4 tracking-wide">
+              MENA's Premier Racing Experience
+            </p>
+            <p className="text-silver text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
+              Join 11,000+ passionate racers in Egypt's most exclusive Assetto Corsa community. 
+              Experience premium servers, custom modifications, and competitive racing since March 2022.
+            </p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link href="/servers">
-              <Button className="bg-racing-red hover:bg-red-700 text-white px-8 py-3">
-                <Play className="h-5 w-5 mr-2" />
-                Join Server
+              <Button className="btn-primary px-12 py-4 text-lg rounded-full font-medium tracking-wide">
+                <Play className="h-5 w-5 mr-3" />
+                Enter Racing
               </Button>
             </Link>
             <Link href="/discord">
-              <Button variant="outline" className="border-2 border-gold-accent text-gold-accent hover:bg-gold-accent hover:text-dark-bg px-8 py-3">
-                <SiDiscord className="h-5 w-5 mr-2" />
-                Discord
+              <Button className="btn-secondary px-12 py-4 text-lg rounded-full font-medium tracking-wide">
+                <SiDiscord className="h-5 w-5 mr-3" />
+                Join Community
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Quick Stats */}
-      <section className="py-16 px-4">
+      {/* Performance Metrics */}
+      <section className="py-24 px-4 relative">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-6 text-center">
-            <div className="bg-dark-card border border-dark-border rounded-lg p-6">
-              <div className="text-3xl font-bold text-racing-red mb-2">11,000+</div>
-              <div className="text-gray-400">Discord Members</div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-light tracking-tight luxury-text mb-4">Performance Metrics</h2>
+            <div className="w-16 h-0.5 bg-electric-blue mx-auto"></div>
+          </div>
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="premium-card text-center">
+              <div className="text-5xl font-light text-electric-blue mb-4">11K+</div>
+              <div className="text-silver font-medium tracking-wide">Community Members</div>
+              <div className="w-8 h-0.5 bg-electric-blue mx-auto mt-3 opacity-60"></div>
             </div>
-            <div className="bg-dark-card border border-dark-border rounded-lg p-6">
-              <div className="text-3xl font-bold text-gold-accent mb-2">500+</div>
-              <div className="text-gray-400">Active Daily</div>
+            <div className="premium-card text-center">
+              <div className="text-5xl font-light text-amber mb-4">500+</div>
+              <div className="text-silver font-medium tracking-wide">Daily Active</div>
+              <div className="w-8 h-0.5 bg-amber mx-auto mt-3 opacity-60"></div>
             </div>
-            <div className="bg-dark-card border border-dark-border rounded-lg p-6">
-              <div className="text-3xl font-bold text-green-400 mb-2">50+</div>
-              <div className="text-gray-400">Car Mods</div>
+            <div className="premium-card text-center">
+              <div className="text-5xl font-light text-emerald-400 mb-4">50+</div>
+              <div className="text-silver font-medium tracking-wide">Custom Vehicles</div>
+              <div className="w-8 h-0.5 bg-emerald-400 mx-auto mt-3 opacity-60"></div>
             </div>
-            <div className="bg-dark-card border border-dark-border rounded-lg p-6">
-              <div className="text-3xl font-bold text-blue-400 mb-2">3</div>
-              <div className="text-gray-400">Regional Servers</div>
+            <div className="premium-card text-center">
+              <div className="text-5xl font-light text-violet-400 mb-4">24/7</div>
+              <div className="text-silver font-medium tracking-wide">Server Uptime</div>
+              <div className="w-8 h-0.5 bg-violet-400 mx-auto mt-3 opacity-60"></div>
             </div>
           </div>
         </div>

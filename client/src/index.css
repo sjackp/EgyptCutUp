@@ -4,55 +4,58 @@
 
 :root {
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --foreground: hsl(220, 13%, 13%);
+  --muted: hsl(210, 40%, 98%);
+  --muted-foreground: hsl(215, 16%, 47%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --popover-foreground: hsl(220, 13%, 13%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(0, 84.2%, 60.2%);
-  --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(20, 14.3%, 4.1%);
-  --radius: 0.5rem;
+  --card-foreground: hsl(220, 13%, 13%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(221, 83%, 53%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(220, 9%, 46%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(220, 9%, 46%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(221, 83%, 53%);
+  --radius: 0.75rem;
   
-  /* Racing theme colors */
-  --racing-red: hsl(0, 84.2%, 60.2%);
-  --gold-accent: hsl(45, 93.4%, 47.5%);
-  --dark-bg: hsl(0, 0%, 10.2%);
-  --dark-card: hsl(0, 0%, 14.9%);
-  --dark-border: hsl(217, 10%, 25.5%);
+  /* Premium automotive colors */
+  --platinum: hsl(240, 6%, 90%);
+  --silver: hsl(240, 4%, 46%);
+  --charcoal: hsl(220, 13%, 13%);
+  --midnight: hsl(220, 26%, 6%);
+  --electric-blue: hsl(206, 100%, 50%);
+  --amber: hsl(43, 100%, 50%);
+  --crimson: hsl(348, 83%, 47%);
+  --glass: hsla(240, 4%, 95%, 0.8);
 }
 
 .dark {
-  --background: hsl(0, 0%, 10.2%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(0, 0%, 14.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(0, 0%, 14.9%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(217, 10%, 25.5%);
-  --input: hsl(217, 10%, 25.5%);
-  --primary: hsl(0, 84.2%, 60.2%);
-  --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(240, 4.9%, 83.9%);
-  --radius: 0.5rem;
+  --background: hsl(220, 26%, 6%);
+  --foreground: hsl(240, 6%, 90%);
+  --muted: hsl(220, 13%, 13%);
+  --muted-foreground: hsl(240, 4%, 46%);
+  --popover: hsl(220, 13%, 13%);
+  --popover-foreground: hsl(240, 6%, 90%);
+  --card: hsl(220, 13%, 13%);
+  --card-foreground: hsl(240, 6%, 90%);
+  --border: hsl(240, 4%, 16%);
+  --input: hsl(240, 4%, 16%);
+  --primary: hsl(206, 100%, 50%);
+  --primary-foreground: hsl(220, 26%, 6%);
+  --secondary: hsl(240, 4%, 16%);
+  --secondary-foreground: hsl(240, 6%, 90%);
+  --accent: hsl(240, 4%, 16%);
+  --accent-foreground: hsl(240, 6%, 90%);
+  --destructive: hsl(348, 83%, 47%);
+  --destructive-foreground: hsl(240, 6%, 90%);
+  --ring: hsl(206, 100%, 50%);
+  --radius: 0.75rem;
 }
 
 @layer base {
@@ -62,8 +65,10 @@
 
   body {
     @apply font-sans antialiased;
-    background-color: var(--dark-bg);
-    color: hsl(0, 0%, 98%);
+    background: linear-gradient(to bottom, var(--midnight), var(--charcoal));
+    color: var(--platinum);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
   }
   
   html {
@@ -72,125 +77,191 @@
 }
 
 @layer components {
-  .racing-gradient {
-    background: linear-gradient(135deg, var(--racing-red) 0%, var(--gold-accent) 100%);
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
   
-  .hero-bg {
-    background-image: linear-gradient(
+  .automotive-gradient {
+    background: linear-gradient(135deg, var(--electric-blue) 0%, var(--amber) 100%);
+  }
+  
+  .hero-section {
+    background: linear-gradient(
       135deg,
-      rgba(10, 10, 10, 0.9) 0%,
-      rgba(220, 38, 38, 0.1) 50%,
-      rgba(10, 10, 10, 0.9) 100%
+      var(--midnight) 0%,
+      rgba(0, 123, 255, 0.1) 50%,
+      var(--charcoal) 100%
     );
+    position: relative;
+  }
+  
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(0, 123, 255, 0.1) 0%, transparent 70%);
   }
   
   .nav-link {
-    @apply transition-colors duration-200;
+    @apply transition-all duration-300 ease-in-out;
+    position: relative;
+  }
+  
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--electric-blue);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+  
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
   }
   
   .nav-link:hover {
-    @apply text-white;
-    background-color: var(--dark-border);
+    color: var(--electric-blue);
   }
   
   .nav-link.active {
-    background-color: var(--racing-red);
-    @apply text-white;
+    color: var(--electric-blue);
   }
   
-  .server-card {
-    @apply bg-card border border-border rounded-lg p-6 hover:border-primary transition-colors;
-    background-color: var(--dark-card);
-    border-color: var(--dark-border);
+  .premium-card {
+    @apply glass-card rounded-xl p-6 transition-all duration-300;
+    background: rgba(13, 13, 13, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   
-  .server-card:hover {
-    border-color: var(--racing-red);
+  .premium-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 123, 255, 0.2);
+    border-color: var(--electric-blue);
   }
   
-  .car-card {
-    @apply bg-card border border-border rounded-lg overflow-hidden hover:border-accent transition-colors;
-    background-color: var(--dark-card);
-    border-color: var(--dark-border);
+  .server-status-online {
+    @apply bg-green-500;
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
   }
   
-  .car-card:hover {
-    border-color: var(--gold-accent);
+  .server-status-offline {
+    @apply bg-red-500;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+  }
+  
+  .server-status-maintenance {
+    @apply bg-amber-500;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
   }
   
   .filter-btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-colors;
+    @apply px-6 py-3 rounded-full font-medium transition-all duration-300;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
   }
   
   .filter-btn.active {
-    background-color: var(--racing-red);
-    @apply text-white;
+    background: var(--electric-blue);
+    color: var(--midnight);
+    box-shadow: 0 0 30px rgba(0, 123, 255, 0.4);
   }
   
-  .filter-btn:not(.active) {
-    background-color: var(--dark-card);
-    border: 1px solid var(--dark-border);
-    @apply text-gray-300 hover:text-white;
-  }
-  
-  .admin-tab {
-    @apply p-4 rounded-lg font-semibold transition-colors;
-  }
-  
-  .admin-tab.active {
-    background-color: var(--racing-red);
-    @apply text-white;
-  }
-  
-  .admin-tab:not(.active) {
-    background-color: var(--dark-card);
-    border: 1px solid var(--dark-border);
-    @apply text-gray-300;
+  .filter-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--electric-blue);
   }
   
   .btn-primary {
-    background-color: var(--racing-red);
-    @apply text-white hover:opacity-90 transition-opacity;
+    background: linear-gradient(135deg, var(--electric-blue), #0056b3);
+    @apply text-white transition-all duration-300;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
   }
   
   .btn-secondary {
-    background-color: var(--gold-accent);
-    color: var(--dark-bg);
-    @apply hover:opacity-90 transition-opacity;
+    background: linear-gradient(135deg, var(--amber), #e09400);
+    color: var(--midnight);
+    @apply transition-all duration-300;
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
   }
   
-  .discord-gradient {
-    background: linear-gradient(135deg, rgba(88, 101, 242, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+  }
+  
+  .luxury-text {
+    background: linear-gradient(135deg, var(--platinum), var(--electric-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .metallic-border {
+    border: 2px solid;
+    border-image: linear-gradient(135deg, var(--platinum), var(--electric-blue)) 1;
   }
 }
 
 @layer utilities {
-  .text-racing-red {
-    color: var(--racing-red);
+  .text-electric-blue {
+    color: var(--electric-blue);
   }
   
-  .text-gold-accent {
-    color: var(--gold-accent);
+  .text-amber {
+    color: var(--amber);
   }
   
-  .bg-racing-red {
-    background-color: var(--racing-red);
+  .text-platinum {
+    color: var(--platinum);
   }
   
-  .bg-gold-accent {
-    background-color: var(--gold-accent);
+  .text-silver {
+    color: var(--silver);
   }
   
-  .bg-dark-bg {
-    background-color: var(--dark-bg);
+  .bg-midnight {
+    background-color: var(--midnight);
   }
   
-  .bg-dark-card {
-    background-color: var(--dark-card);
+  .bg-charcoal {
+    background-color: var(--charcoal);
   }
   
-  .border-dark-border {
-    border-color: var(--dark-border);
+  .bg-electric-blue {
+    background-color: var(--electric-blue);
+  }
+  
+  .bg-amber {
+    background-color: var(--amber);
+  }
+  
+  .border-electric-blue {
+    border-color: var(--electric-blue);
+  }
+  
+  .shadow-electric-blue {
+    box-shadow: 0 0 30px rgba(0, 123, 255, 0.3);
+  }
+  
+  .shadow-amber {
+    box-shadow: 0 0 30px rgba(255, 193, 7, 0.3);
   }
 }
