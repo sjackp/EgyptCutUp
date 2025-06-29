@@ -68,7 +68,7 @@ export default function Navigation() {
           <div className="hidden md:block">
             {!isAuthenticated ? (
               <Button
-                onClick={() => window.location.href = "/api/login"}
+                onClick={() => window.location.href = "/login"}
                 className="btn-primary px-6 py-2.5 rounded-full font-medium"
               >
                 <User className="h-4 w-4 mr-2" />
@@ -77,10 +77,13 @@ export default function Navigation() {
             ) : (
               <div className="flex items-center space-x-4">
                 <span className="text-platinum text-sm font-medium">
-                  {user?.firstName || user?.email || 'Admin'}
+                  {user?.username || 'Admin'}
                 </span>
                 <Button
-                  onClick={() => window.location.href = "/api/logout"}
+                  onClick={async () => {
+                    await fetch("/api/logout", { method: "POST" });
+                    window.location.href = "/";
+                  }}
                   variant="outline"
                   className="border-white/20 text-platinum hover:bg-white/10 rounded-full px-4 py-2"
                 >
@@ -138,7 +141,7 @@ export default function Navigation() {
               {!isAuthenticated ? (
                 <Button
                   onClick={() => {
-                    window.location.href = "/api/login";
+                    window.location.href = "/login";
                     setIsMobileMenuOpen(false);
                   }}
                   className="w-full btn-primary rounded-xl py-3"
@@ -149,11 +152,12 @@ export default function Navigation() {
               ) : (
                 <div className="space-y-3">
                   <p className="text-platinum text-sm px-4 font-medium">
-                    {user?.firstName || user?.email || 'Admin'}
+                    {user?.username || 'Admin'}
                   </p>
                   <Button
-                    onClick={() => {
-                      window.location.href = "/api/logout";
+                    onClick={async () => {
+                      await fetch("/api/logout", { method: "POST" });
+                      window.location.href = "/";
                       setIsMobileMenuOpen(false);
                     }}
                     variant="outline"

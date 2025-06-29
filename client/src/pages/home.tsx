@@ -14,7 +14,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 py-20">
         <div className="text-center mb-20">
           <h1 className="text-5xl font-light tracking-tight luxury-text mb-6">
-            Welcome back, {user?.firstName || user?.email || 'Administrator'}
+            Welcome back, {user?.username || 'Administrator'}
           </h1>
           <div className="w-16 h-0.5 bg-electric-blue mx-auto mb-6"></div>
           <p className="text-silver text-xl">Premium management dashboard for EGCU racing community</p>
