@@ -51,8 +51,14 @@ export const cars = pgTable("cars", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   make: varchar("make", { length: 50 }).notNull(),
+  year: integer("year").notNull(),
+  thumbnail: text("thumbnail"),
   description: text("description"),
-  imageUrl: text("image_url"),
+  horsepower: integer("horsepower"), // HP
+  torque: integer("torque"), // Nm
+  weight: integer("weight"), // kg
+  maxSpeed: integer("max_speed"), // km/h
+  acceleration: decimal("acceleration", { precision: 3, scale: 1 }), // 0-100 km/h in seconds
   downloadLink: text("download_link"),
   category: varchar("category", { length: 50 }).default("standard"), // new, exclusive, standard
   isActive: boolean("is_active").default(true),
