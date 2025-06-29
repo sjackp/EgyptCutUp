@@ -110,7 +110,7 @@
   }
   
   .car-card {
-    @apply bg-card border border-border rounded-lg overflow-hidden hover:border-accent transition-colors group;
+    @apply bg-card border border-border rounded-lg overflow-hidden hover:border-accent transition-colors;
     background-color: var(--dark-card);
     border-color: var(--dark-border);
   }

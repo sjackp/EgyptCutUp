@@ -16,7 +16,7 @@ import {
   type InsertDiscordStats,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 
 // Interface for storage operations
 export interface IStorage {
@@ -99,7 +99,7 @@ export class DatabaseStorage implements IStorage {
 
   async deleteServer(id: number): Promise<boolean> {
     const result = await db.delete(servers).where(eq(servers.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Car operations
@@ -109,7 +109,7 @@ export class DatabaseStorage implements IStorage {
 
   async getCarsByMake(make: string): Promise<Car[]> {
     return await db.select().from(cars)
-      .where(eq(cars.make, make) && eq(cars.isActive, true))
+      .where(and(eq(cars.make, make), eq(cars.isActive, true)))
       .orderBy(desc(cars.createdAt));
   }
 
@@ -134,7 +134,7 @@ export class DatabaseStorage implements IStorage {
 
   async deleteCar(id: number): Promise<boolean> {
     const result = await db.delete(cars).where(eq(cars.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Shop operations
@@ -163,7 +163,7 @@ export class DatabaseStorage implements IStorage {
 
   async deleteShopItem(id: number): Promise<boolean> {
     const result = await db.delete(shopItems).where(eq(shopItems.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Discord stats
