@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Trash2, Edit, Plus, Car, Flag } from "lucide-react";
+import { Trash2, Edit, Plus, Car as CarIcon, Flag } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { Car, InsertCar } from "@shared/schema";
@@ -453,7 +453,7 @@ export function CarManager() {
         
         <TabsContent value="international" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {internationalCars.map((car: Car) => (
+            {internationalCars.map((car) => (
               <CarCard key={car.id} car={car} />
             ))}
           </div>
@@ -466,7 +466,7 @@ export function CarManager() {
         
         <TabsContent value="egyptian" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {egyptianCars.map((car: Car) => (
+            {egyptianCars.map((car) => (
               <CarCard key={car.id} car={car} />
             ))}
           </div>

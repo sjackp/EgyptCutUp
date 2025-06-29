@@ -1,22 +1,27 @@
 import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Navigation from "@/components/navigation";
-import { ServerForm, CarForm, ShopItemForm } from "@/components/admin-forms";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { Server, Car, ShopItem } from "@shared/schema";
-import { Settings, Trash2, Edit } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { Settings, Trash2, Edit, Plus, Server as ServerIcon, Car as CarIcon, Package, Crown } from "lucide-react";
+import type { Server, Car, ShopItem } from "@shared/schema";
 
 export default function Admin() {
-  const [activeTab, setActiveTab] = useState<"servers" | "cars" | "shop">("servers");
   const { toast } = useToast();
   const { isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState("servers");
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -33,21 +38,23 @@ export default function Admin() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: servers } = useQuery<Server[]>({
+  // Queries
+  const { data: servers = [] } = useQuery<Server[]>({
     queryKey: ["/api/servers"],
-    enabled: activeTab === "servers" && isAuthenticated,
+    enabled: isAuthenticated,
   });
 
-  const { data: cars } = useQuery<Car[]>({
+  const { data: cars = [] } = useQuery<Car[]>({
     queryKey: ["/api/cars"],
-    enabled: activeTab === "cars" && isAuthenticated,
+    enabled: isAuthenticated,
   });
 
-  const { data: shopItems } = useQuery<ShopItem[]>({
+  const { data: shopItems = [] } = useQuery<ShopItem[]>({
     queryKey: ["/api/shop"],
-    enabled: activeTab === "shop" && isAuthenticated,
+    enabled: isAuthenticated,
   });
 
+  // Delete mutations
   const deleteServerMutation = useMutation({
     mutationFn: async (id: number) => {
       await apiRequest("DELETE", `/api/servers/${id}`);
@@ -134,104 +141,87 @@ export default function Admin() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center">
+        <div className="text-white text-xl">Loading admin panel...</div>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return null; // Will redirect via useEffect
+    return null;
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg text-gray-100">
-      <Navigation />
-      
-      <section className="py-16 px-4 bg-yellow-500/10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-white mb-4">Admin Panel</h1>
-            <p className="text-gray-400">Manage servers, cars, and shop items</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
+              <Settings className="h-8 w-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold text-white">Admin Dashboard</h1>
+              <p className="text-gray-300">Manage servers, cars, and shop items for EGCU Racing Community</p>
+            </div>
           </div>
+          
+          <div className="flex flex-wrap gap-3">
+            <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/50">
+              <Server className="h-3 w-3 mr-1" />
+              {servers.length} Servers
+            </Badge>
+            <Badge className="bg-red-500/20 text-red-400 border-red-500/50">
+              <CarIcon className="h-3 w-3 mr-1" />
+              {cars.length} Cars
+            </Badge>
+            <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
+              <Package className="h-3 w-3 mr-1" />
+              {shopItems.length} Shop Items
+            </Badge>
+          </div>
+        </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <Button
-              onClick={() => setActiveTab("servers")}
-              className={`admin-tab ${
-                activeTab === "servers"
-                  ? "bg-racing-red text-white"
-                  : "bg-dark-card border border-dark-border text-gray-300"
-              }`}
-            >
-              <Settings className="h-5 w-5 mr-2" />
-              Manage Servers
-            </Button>
-            <Button
-              onClick={() => setActiveTab("cars")}
-              className={`admin-tab ${
-                activeTab === "cars"
-                  ? "bg-racing-red text-white"
-                  : "bg-dark-card border border-dark-border text-gray-300"
-              }`}
-            >
-              <Settings className="h-5 w-5 mr-2" />
-              Manage Cars
-            </Button>
-            <Button
-              onClick={() => setActiveTab("shop")}
-              className={`admin-tab ${
-                activeTab === "shop"
-                  ? "bg-racing-red text-white"
-                  : "bg-dark-card border border-dark-border text-gray-300"
-              }`}
-            >
-              <Settings className="h-5 w-5 mr-2" />
-              Manage Shop
-            </Button>
-          </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3 bg-gray-800 mb-8">
+            <TabsTrigger value="servers" className="data-[state=active]:bg-blue-600">
+              <Server className="h-4 w-4 mr-2" />
+              Servers
+            </TabsTrigger>
+            <TabsTrigger value="cars" className="data-[state=active]:bg-red-600">
+              <CarIcon className="h-4 w-4 mr-2" />
+              Cars
+            </TabsTrigger>
+            <TabsTrigger value="shop" className="data-[state=active]:bg-green-600">
+              <Package className="h-4 w-4 mr-2" />
+              Shop
+            </TabsTrigger>
+          </TabsList>
 
           {/* Servers Tab */}
-          {activeTab === "servers" && (
-            <div className="space-y-6">
-              <Card className="bg-dark-card border-dark-border">
-                <CardHeader>
-                  <CardTitle className="text-white">Add New Server</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ServerForm onSuccess={() => {}} />
-                </CardContent>
-              </Card>
-
-              {servers && servers.length > 0 && (
-                <Card className="bg-dark-card border-dark-border">
-                  <CardHeader>
-                    <CardTitle className="text-white">Existing Servers</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {servers.map((server) => (
-                        <div key={server.id} className="flex items-center justify-between p-4 bg-dark-bg rounded-lg">
-                          <div>
-                            <h3 className="text-white font-semibold">{server.name}</h3>
-                            <p className="text-gray-400 text-sm">{server.region} • {server.currentPlayers}/{server.maxPlayers} players</p>
-                            <Badge className={`mt-1 ${
-                              server.status === "online" ? "bg-green-500" :
-                              server.status === "offline" ? "bg-red-500" : "bg-yellow-500"
-                            } text-white`}>
-                              {server.status}
-                            </Badge>
-                          </div>
+          <TabsContent value="servers">
+            <Card className="bg-gray-800 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  Server Management
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Server
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {servers.map((server) => (
+                    <Card key={server.id} className="bg-gray-700 border-gray-600">
+                      <CardHeader>
+                        <CardTitle className="text-white text-lg flex items-center justify-between">
+                          {server.name}
                           <div className="flex gap-2">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                            >
+                            <Button size="sm" variant="outline">
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button
-                              size="sm"
+                            <Button 
+                              size="sm" 
                               variant="destructive"
                               onClick={() => deleteServerMutation.mutate(server.id)}
                               disabled={deleteServerMutation.isPending}
@@ -239,55 +229,51 @@ export default function Admin() {
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2 text-sm text-gray-300">
+                          <p><strong>Region:</strong> {server.region}</p>
+                          <p><strong>Players:</strong> {server.currentPlayers}/{server.maxPlayers}</p>
+                          <p><strong>Status:</strong> 
+                            <Badge className={server.status === 'online' ? 'bg-green-500/20 text-green-400 ml-2' : 'bg-red-500/20 text-red-400 ml-2'}>
+                              {server.status}
+                            </Badge>
+                          </p>
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Cars Tab */}
-          {activeTab === "cars" && (
-            <div className="space-y-6">
-              <Card className="bg-dark-card border-dark-border">
-                <CardHeader>
-                  <CardTitle className="text-white">Add New Car</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CarForm onSuccess={() => {}} />
-                </CardContent>
-              </Card>
-
-              {cars && cars.length > 0 && (
-                <Card className="bg-dark-card border-dark-border">
-                  <CardHeader>
-                    <CardTitle className="text-white">Existing Cars</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {cars.map((car) => (
-                        <div key={car.id} className="flex items-center justify-between p-4 bg-dark-bg rounded-lg">
-                          <div className="flex-1">
-                            <h3 className="text-white font-semibold">{car.name}</h3>
-                            <p className="text-gray-400 text-sm">{car.make}</p>
-                            {car.category !== "standard" && (
-                              <Badge className="mt-1 bg-gold-accent text-dark-bg">
-                                {car.category}
-                              </Badge>
-                            )}
-                          </div>
+          <TabsContent value="cars">
+            <Card className="bg-gray-800 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  Car Management
+                  <Button className="bg-red-600 hover:bg-red-700">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Car
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {cars.map((car) => (
+                    <Card key={car.id} className="bg-gray-700 border-gray-600">
+                      <CardHeader>
+                        <CardTitle className="text-white text-lg flex items-center justify-between">
+                          {car.name}
                           <div className="flex gap-2">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                            >
+                            <Button size="sm" variant="outline">
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button
-                              size="sm"
+                            <Button 
+                              size="sm" 
                               variant="destructive"
                               onClick={() => deleteCarMutation.mutate(car.id)}
                               disabled={deleteCarMutation.isPending}
@@ -295,50 +281,52 @@ export default function Admin() {
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2 text-sm text-gray-300">
+                          <p><strong>Make:</strong> {car.make}</p>
+                          <p><strong>Year:</strong> {car.year}</p>
+                          {car.horsepower && <p><strong>HP:</strong> {car.horsepower}</p>}
+                          {car.hasEgyptianPlates && (
+                            <Badge className="bg-yellow-500/20 text-yellow-400">
+                              Egyptian Plates
+                            </Badge>
+                          )}
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Shop Tab */}
-          {activeTab === "shop" && (
-            <div className="space-y-6">
-              <Card className="bg-dark-card border-dark-border">
-                <CardHeader>
-                  <CardTitle className="text-white">Add New Shop Item</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ShopItemForm onSuccess={() => {}} />
-                </CardContent>
-              </Card>
-
-              {shopItems && shopItems.length > 0 && (
-                <Card className="bg-dark-card border-dark-border">
-                  <CardHeader>
-                    <CardTitle className="text-white">Existing Shop Items</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {shopItems.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between p-4 bg-dark-bg rounded-lg">
-                          <div className="flex-1">
-                            <h3 className="text-white font-semibold">{item.name}</h3>
-                            <p className="text-gray-400 text-sm">{item.type} • ${parseFloat(item.price).toFixed(2)}</p>
-                          </div>
+          <TabsContent value="shop">
+            <Card className="bg-gray-800 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  Shop Management
+                  <Button className="bg-green-600 hover:bg-green-700">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Item
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {shopItems.map((item) => (
+                    <Card key={item.id} className="bg-gray-700 border-gray-600">
+                      <CardHeader>
+                        <CardTitle className="text-white text-lg flex items-center justify-between">
+                          {item.name}
                           <div className="flex gap-2">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                            >
+                            <Button size="sm" variant="outline">
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button
-                              size="sm"
+                            <Button 
+                              size="sm" 
                               variant="destructive"
                               onClick={() => deleteShopItemMutation.mutate(item.id)}
                               disabled={deleteShopItemMutation.isPending}
@@ -346,16 +334,25 @@ export default function Admin() {
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2 text-sm text-gray-300">
+                          <p><strong>Price:</strong> ${item.price}</p>
+                          <p><strong>Category:</strong> {item.category}</p>
+                          {item.description && (
+                            <p className="text-xs text-gray-400 line-clamp-2">{item.description}</p>
+                          )}
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }
