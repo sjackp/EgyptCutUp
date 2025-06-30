@@ -12,13 +12,13 @@ export default function ServerCard({ server }: ServerCardProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "online":
-        return "server-status-online";
+        return "bg-green-500 shadow-green-500/50";
       case "offline":
-        return "server-status-offline";
+        return "bg-red-500 shadow-red-500/50";
       case "maintenance":
-        return "server-status-maintenance";
+        return "bg-yellow-500 shadow-yellow-500/50";
       default:
-        return "bg-gray-500";
+        return "bg-gray-500 shadow-gray-500/50";
     }
   };
 
@@ -41,7 +41,20 @@ export default function ServerCard({ server }: ServerCardProps) {
           />
         </div>
         <div className="absolute top-4 right-4 flex items-center space-x-3">
-          <div className={`w-4 h-4 rounded-full ${getStatusColor(server.status)} animate-pulse`}></div>
+          {/* Traffic Light Status Indicator */}
+          <div className="bg-black/70 backdrop-blur-sm rounded-lg p-2 border border-white/20">
+            <div className="flex flex-col space-y-1">
+              <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                server.status === 'online' ? 'bg-green-500 shadow-lg shadow-green-500/50 animate-pulse' : 'bg-gray-600/50'
+              }`}></div>
+              <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                server.status === 'maintenance' ? 'bg-yellow-500 shadow-lg shadow-yellow-500/50 animate-pulse' : 'bg-gray-600/50'
+              }`}></div>
+              <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                server.status === 'offline' ? 'bg-red-500 shadow-lg shadow-red-500/50 animate-pulse' : 'bg-gray-600/50'
+              }`}></div>
+            </div>
+          </div>
           <span className="text-sm font-medium text-white capitalize tracking-wide bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm">{server.status}</span>
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-midnight/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
