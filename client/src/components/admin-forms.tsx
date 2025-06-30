@@ -23,10 +23,13 @@ export function ServerForm({ onSuccess }: { onSuccess: () => void }) {
       region: "",
       maxPlayers: 32,
       currentPlayers: 0,
-      status: "offline",
+      trafficDensity: 50,
       track: "",
-      gameMode: "",
+      availableVipSlots: 0,
       joinLink: "",
+      bannerUrl: "",
+      status: "offline",
+      gameMode: "",
     },
   });
 

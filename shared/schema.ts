@@ -39,10 +39,13 @@ export const servers = pgTable("servers", {
   region: varchar("region", { length: 50 }).notNull(),
   maxPlayers: integer("max_players").notNull(),
   currentPlayers: integer("current_players").default(0),
-  status: varchar("status", { length: 20 }).notNull().default("offline"), // online, offline, maintenance
+  trafficDensity: integer("traffic_density").default(50), // 0-100%
   track: varchar("track", { length: 100 }),
-  gameMode: varchar("game_mode", { length: 50 }),
+  availableVipSlots: integer("available_vip_slots").default(0),
   joinLink: text("join_link"),
+  bannerUrl: text("banner_url"),
+  status: varchar("status", { length: 20 }).notNull().default("offline"), // online, offline, maintenance
+  gameMode: varchar("game_mode", { length: 50 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
