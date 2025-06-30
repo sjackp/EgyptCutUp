@@ -89,9 +89,41 @@ export default function CarCard({ car }: CarCardProps) {
         
         {/* Max Speed */}
         <div className="bg-gradient-to-r from-amber/20 to-electric-blue/20 rounded-lg p-3 mb-6 border border-amber/30">
-          <div className="text-center">
-            <p className="text-amber text-xs uppercase tracking-wide mb-1">Top Speed</p>
-            <p className="text-platinum text-lg font-medium">{car.maxSpeed || 'N/A'} km/h</p>
+          <div className="flex items-center justify-center space-x-3">
+            {/* Circular Gauge Icon */}
+            <div className="relative w-12 h-12 flex items-center justify-center">
+              <svg className="w-10 h-10 transform -rotate-90" viewBox="0 0 36 36">
+                {/* Background circle */}
+                <path
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.1)"
+                  strokeWidth="2"
+                />
+                {/* Progress arc */}
+                <path
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                  fill="none"
+                  stroke="rgb(251, 191, 36)"
+                  strokeWidth="2"
+                  strokeDasharray="75, 25"
+                  strokeLinecap="round"
+                  className="animate-pulse"
+                />
+              </svg>
+              {/* Center needle */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-1 h-4 bg-amber rounded-full transform rotate-45 origin-bottom"></div>
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="text-amber text-xs uppercase tracking-wide mb-1">Top Speed</p>
+              <p className="text-platinum text-lg font-medium">{car.maxSpeed || 'N/A'} km/h</p>
+            </div>
           </div>
         </div>
         
