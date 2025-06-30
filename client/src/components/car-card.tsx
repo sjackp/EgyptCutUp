@@ -87,44 +87,82 @@ export default function CarCard({ car }: CarCardProps) {
           </div>
         </div>
         
-        {/* Max Speed */}
-        <div className="bg-gradient-to-r from-amber/20 to-electric-blue/20 rounded-lg p-3 mb-6 border border-amber/30">
-          <div className="flex items-center justify-center space-x-3">
-            {/* Circular Gauge Icon */}
-            <div className="relative w-12 h-12 flex items-center justify-center">
-              <svg className="w-10 h-10 transform -rotate-90" viewBox="0 0 36 36">
-                {/* Background circle */}
-                <path
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="rgba(255, 255, 255, 0.1)"
-                  strokeWidth="2"
-                />
-                {/* Progress arc */}
-                <path
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="rgb(251, 191, 36)"
-                  strokeWidth="2"
-                  strokeDasharray="75, 25"
-                  strokeLinecap="round"
-                  className="animate-pulse"
-                />
-              </svg>
-              {/* Center needle */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-1 h-4 bg-amber rounded-full transform rotate-45 origin-bottom"></div>
+        {/* Max Speed with Dashboard Gauge */}
+        <div className="bg-gradient-to-r from-amber/20 to-electric-blue/20 rounded-lg p-4 mb-6 border border-amber/30">
+          <div className="text-center mb-4">
+            <p className="text-amber text-xs uppercase tracking-wide mb-1">Top Speed</p>
+          </div>
+          
+          {/* Circular Dashboard Speedometer */}
+          {car.maxSpeed && (
+            <div className="flex flex-col items-center">
+              <div className="relative w-24 h-24">
+                {/* Gauge Background */}
+                <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+                  {/* Background Arc */}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth="8"
+                    strokeDasharray="188.5"
+                    strokeDashoffset="47.1"
+                    className="opacity-30"
+                  />
+                  {/* Speed Arc */}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    fill="none"
+                    stroke="url(#speedGradient)"
+                    strokeWidth="8"
+                    strokeDasharray="188.5"
+                    strokeDashoffset={188.5 - (Math.min(car.maxSpeed / 400, 1) * 141.4)}
+                    strokeLinecap="round"
+                    className="transition-all duration-2000 ease-out"
+                  />
+                  {/* Gradient Definition */}
+                  <defs>
+                    <linearGradient id="speedGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#f59e0b" />
+                      <stop offset="50%" stopColor="#06b6d4" />
+                      <stop offset="100%" stopColor="#dc2626" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                
+                {/* Center Speed Value */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-lg font-bold text-platinum">{car.maxSpeed}</span>
+                  <span className="text-xs text-silver">km/h</span>
+                </div>
+                
+                {/* Needle */}
+                <div 
+                  className="absolute top-1/2 left-1/2 w-0.5 h-8 bg-racing-red origin-bottom transform -translate-x-1/2 -translate-y-8 transition-transform duration-2000 ease-out"
+                  style={{
+                    transform: `translate(-50%, -2rem) rotate(${-135 + (Math.min(car.maxSpeed / 400, 1) * 270)}deg)`
+                  }}
+                ></div>
+              </div>
+              
+              {/* Speed Scale */}
+              <div className="flex justify-between w-full text-xs text-silver mt-2 px-2">
+                <span>0</span>
+                <span className="text-amber">200</span>
+                <span className="text-racing-red">400+</span>
               </div>
             </div>
+          )}
+          
+          {!car.maxSpeed && (
             <div className="text-center">
-              <p className="text-amber text-xs uppercase tracking-wide mb-1">Top Speed</p>
-              <p className="text-platinum text-lg font-medium">{car.maxSpeed || 'N/A'} km/h</p>
+              <p className="text-platinum text-lg font-medium">N/A</p>
             </div>
-          </div>
+          )}
         </div>
         
         <Button
