@@ -87,12 +87,32 @@ export default function CarCard({ car }: CarCardProps) {
           </div>
         </div>
         
-        {/* Max Speed */}
-        <div className="bg-gradient-to-r from-amber/20 to-electric-blue/20 rounded-lg p-3 mb-6 border border-amber/30">
-          <div className="text-center">
+        {/* Max Speed with Gauge */}
+        <div className="bg-gradient-to-r from-amber/20 to-electric-blue/20 rounded-lg p-4 mb-6 border border-amber/30">
+          <div className="text-center mb-3">
             <p className="text-amber text-xs uppercase tracking-wide mb-1">Top Speed</p>
             <p className="text-platinum text-lg font-medium">{car.maxSpeed || 'N/A'} km/h</p>
           </div>
+          
+          {/* Speed Gauge */}
+          {car.maxSpeed && (
+            <div className="w-full">
+              <div className="relative h-3 bg-midnight/50 rounded-full overflow-hidden border border-amber/20">
+                <div 
+                  className="absolute left-0 top-0 h-full bg-gradient-to-r from-amber via-electric-blue to-racing-red rounded-full transition-all duration-1000 ease-out"
+                  style={{ 
+                    width: `${Math.min((car.maxSpeed / 400) * 100, 100)}%` 
+                  }}
+                ></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
+              </div>
+              <div className="flex justify-between text-xs text-silver mt-1">
+                <span>0</span>
+                <span className="text-amber">200</span>
+                <span className="text-racing-red">400+ km/h</span>
+              </div>
+            </div>
+          )}
         </div>
         
         <Button
