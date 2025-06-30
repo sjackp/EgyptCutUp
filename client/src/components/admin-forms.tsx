@@ -171,6 +171,68 @@ export function ServerForm({ onSuccess }: { onSuccess: () => void }) {
           )}
         />
 
+        <div className="grid md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="trafficDensity"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-300">Traffic Density (%)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    min="0"
+                    max="100"
+                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="availableVipSlots"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-300">Available VIP Slots</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    min="0"
+                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="bannerUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-gray-300">Banner URL</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="url"
+                  placeholder="https://..."
+                  className="bg-dark-bg border-dark-border text-white focus:border-racing-red"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="joinLink"
