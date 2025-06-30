@@ -41,6 +41,25 @@ export default function ServerCard({ server }: ServerCardProps) {
           />
         </div>
         <div className="absolute top-4 right-4 flex items-center space-x-3">
+          {/* Status Labels */}
+          <div className="flex flex-col space-y-1 text-right">
+            <span className={`text-xs font-medium tracking-wide transition-all duration-300 ${
+              server.status === 'online' ? 'text-green-400 animate-pulse' : 'text-gray-500'
+            }`}>
+              {server.status === 'online' ? 'ONLINE' : ''}
+            </span>
+            <span className={`text-xs font-medium tracking-wide transition-all duration-300 ${
+              server.status === 'maintenance' ? 'text-yellow-400 animate-pulse' : 'text-gray-500'
+            }`}>
+              {server.status === 'maintenance' ? 'MAINTENANCE' : ''}
+            </span>
+            <span className={`text-xs font-medium tracking-wide transition-all duration-300 ${
+              server.status === 'offline' ? 'text-red-400 animate-pulse' : 'text-gray-500'
+            }`}>
+              {server.status === 'offline' ? 'OFFLINE' : ''}
+            </span>
+          </div>
+          
           {/* Traffic Light Status Indicator */}
           <div className="bg-black/70 backdrop-blur-sm rounded-lg p-2 border border-white/20">
             <div className="flex flex-col space-y-1">
@@ -55,7 +74,6 @@ export default function ServerCard({ server }: ServerCardProps) {
               }`}></div>
             </div>
           </div>
-          <span className="text-sm font-medium text-white capitalize tracking-wide bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm">{server.status}</span>
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-midnight/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>

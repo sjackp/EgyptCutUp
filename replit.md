@@ -121,6 +121,7 @@ RESTful API endpoints:
 - June 29, 2025. Populated with comprehensive mock data (8 servers, 20 cars, 12 shop items)
 
 ## Recent Changes
+- **Traffic Light System**: Implemented intuitive server status indicators with right-centered positioning and aligned status text
 - **Design Overhaul**: Transformed from racing theme to luxury automotive aesthetic inspired by BMW, Mercedes, Audi
 - **Premium Components**: Implemented glass-card effects, sophisticated gradients, elegant typography
 - **Mock Data Population**: Added realistic servers across MENA region, premium car modifications, and exclusive shop items
