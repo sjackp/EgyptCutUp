@@ -1,38 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Users, MapPin, Gamepad2, Crown, Activity, ExternalLink, RefreshCw, Wifi } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useIndividualServerStatus, type ServerStatus } from "@/hooks/useServerStatus";
+import { useIndividualServerStatus } from "@/hooks/useServerStatus";
+import { Users, MapPin, Gamepad2, Crown, Activity, ExternalLink, RefreshCw } from "lucide-react";
+import { useEffect, useState } from "react";
 
-interface ServerCardProps {
-  server: ServerStatus;
+interface RealTimeServerCardProps {
+  serverId: number;
+  server: {
+    id: number;
+    name: string;
+    region: string;
+    maxPlayers: number;
+    currentPlayers: number;
+    track?: string;
+    gameMode?: string;
+    status: string;
+    joinLink?: string;
+    bannerUrl?: string;
+  };
 }
 
-export default function ServerCard({ server }: ServerCardProps) {
-  const { serverStatus, isLoading, lastUpdate, refreshStatus } = useIndividualServerStatus(server.id, {
-    autoRefresh: true,
-    refreshInterval: 30000
-  });
-  const [timeSinceUpdate, setTimeSinceUpdate] = useState(0);
+export default function RealTimeServerCard({ serverId, server }: RealTimeServerCardProps) {
+  const { serverStatus, isLoading, lastUpdate, refreshStatus } = useIndividualServerStatus(serverId);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Use real-time data if available, otherwise fall back to server prop
-  const currentData = serverStatus || {
-    id: server.id,
-    name: server.name,
-    players: server.players || 0,
-    maxPlayers: server.maxPlayers,
-    track: server.track || 'Unknown',
-    session: server.session || 'Unknown',
-    status: server.status,
-    lastUpdate: new Date(),
-    region: server.region,
-    joinLink: server.joinLink || undefined,
-    bannerUrl: server.bannerUrl || undefined,
-    trafficDensity: server.trafficDensity,
-    availableVipSlots: server.availableVipSlots,
-    gameMode: server.gameMode
-  };
+  // Use real-time data if available, fallback to server prop
+  const currentServer = serverStatus || server;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -48,30 +42,26 @@ export default function ServerCard({ server }: ServerCardProps) {
   };
 
   const getCapacityPercentage = () => {
-    if (!currentData.maxPlayers || currentData.maxPlayers === 0) return 0;
-    return ((currentData.players || 0) / currentData.maxPlayers) * 100;
+    if (!currentServer.maxPlayers || currentServer.maxPlayers === 0) return 0;
+    return ((currentServer.currentPlayers || 0) / currentServer.maxPlayers) * 100;
   };
 
-  const isServerAvailable = currentData.status === "online";
+  const isServerAvailable = currentServer.status === "online";
 
-  // Handle manual refresh
-  const handleManualRefresh = async () => {
-    try {
-      await refreshStatus();
-    } catch (error) {
-      console.log(`Failed to refresh data for ${server.name}:`, error);
-    }
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await refreshStatus();
+    setIsRefreshing(false);
   };
 
-  // Update time since last update
+  // Auto-refresh indicator
+  const [timeSinceUpdate, setTimeSinceUpdate] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeSinceUpdate(Math.floor((Date.now() - lastUpdate.getTime()) / 1000));
     }, 1000);
     return () => clearInterval(interval);
   }, [lastUpdate]);
-
-
 
   return (
     <div className="premium-card group overflow-hidden relative">
@@ -92,11 +82,11 @@ export default function ServerCard({ server }: ServerCardProps) {
         <Button
           size="sm"
           variant="ghost"
-          onClick={handleManualRefresh}
-          disabled={isLoading}
+          onClick={handleRefresh}
+          disabled={isRefreshing}
           className="bg-black/50 hover:bg-black/70 text-white border border-white/20"
         >
-          <RefreshCw className={`h-3 w-3 ${isLoading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-3 w-3 ${isRefreshing ? 'animate-spin' : ''}`} />
         </Button>
       </div>
 
@@ -104,8 +94,8 @@ export default function ServerCard({ server }: ServerCardProps) {
       <div className="relative mb-6">
         <div className="aspect-video overflow-hidden rounded-t-xl">
           <img
-            src={server.bannerUrl || "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=400&fit=crop"}
-            alt={server.name}
+            src={currentServer.bannerUrl || "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=400&fit=crop"}
+            alt={currentServer.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
           />
         </div>
@@ -113,19 +103,19 @@ export default function ServerCard({ server }: ServerCardProps) {
           {/* Status Labels */}
           <div className="flex flex-col space-y-1 text-right">
             <span className={`text-xs font-medium tracking-wide transition-all duration-300 ${
-              currentData.status === 'online' ? 'text-green-400 animate-pulse' : 'text-gray-500'
+              currentServer.status === 'online' ? 'text-green-400 animate-pulse' : 'text-gray-500'
             }`}>
-              {currentData.status === 'online' ? 'ONLINE' : ''}
+              {currentServer.status === 'online' ? 'ONLINE' : ''}
             </span>
             <span className={`text-xs font-medium tracking-wide transition-all duration-300 ${
-              server.status === 'maintenance' ? 'text-yellow-400 animate-pulse' : 'text-gray-500'
+              currentServer.status === 'maintenance' ? 'text-yellow-400 animate-pulse' : 'text-gray-500'
             }`}>
-              {server.status === 'maintenance' ? 'MAINTENANCE' : ''}
+              {currentServer.status === 'maintenance' ? 'MAINTENANCE' : ''}
             </span>
             <span className={`text-xs font-medium tracking-wide transition-all duration-300 ${
-              currentData.status === 'offline' ? 'text-red-400 animate-pulse' : 'text-gray-500'
+              currentServer.status === 'offline' ? 'text-red-400 animate-pulse' : 'text-gray-500'
             }`}>
-              {currentData.status === 'offline' ? 'OFFLINE' : ''}
+              {currentServer.status === 'offline' ? 'OFFLINE' : ''}
             </span>
           </div>
           
@@ -133,13 +123,13 @@ export default function ServerCard({ server }: ServerCardProps) {
           <div className="bg-black/70 backdrop-blur-sm rounded-lg p-2 border border-white/20">
             <div className="flex flex-col space-y-1">
               <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                currentData.status === 'online' ? 'bg-green-500 shadow-lg shadow-green-500/50 animate-pulse' : 'bg-gray-600/50'
+                currentServer.status === 'online' ? 'bg-green-500 shadow-lg shadow-green-500/50 animate-pulse' : 'bg-gray-600/50'
               }`}></div>
               <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                server.status === 'maintenance' ? 'bg-yellow-500 shadow-lg shadow-yellow-500/50 animate-pulse' : 'bg-gray-600/50'
+                currentServer.status === 'maintenance' ? 'bg-yellow-500 shadow-lg shadow-yellow-500/50 animate-pulse' : 'bg-gray-600/50'
               }`}></div>
               <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                currentData.status === 'offline' ? 'bg-red-500 shadow-lg shadow-red-500/50 animate-pulse' : 'bg-gray-600/50'
+                currentServer.status === 'offline' ? 'bg-red-500 shadow-lg shadow-red-500/50 animate-pulse' : 'bg-gray-600/50'
               }`}></div>
             </div>
           </div>
@@ -150,8 +140,8 @@ export default function ServerCard({ server }: ServerCardProps) {
       <div className="p-6">
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h3 className="text-2xl font-light text-platinum mb-2 tracking-wide">{server.name}</h3>
-            <p className="text-amber text-sm uppercase tracking-wider font-medium">{server.region}</p>
+            <h3 className="text-2xl font-light text-platinum mb-2 tracking-wide">{currentServer.name}</h3>
+            <p className="text-amber text-sm uppercase tracking-wider font-medium">{currentServer.region}</p>
           </div>
         </div>
         
@@ -162,7 +152,7 @@ export default function ServerCard({ server }: ServerCardProps) {
               <span className="text-sm tracking-wide">Capacity</span>
             </div>
             <span className="text-platinum font-medium text-lg">
-              {isLoading ? '...' : `${currentData.players}/${currentData.maxPlayers}`}
+              {isLoading ? '...' : `${currentServer.currentPlayers}/${currentServer.maxPlayers}`}
             </span>
           </div>
           
@@ -175,56 +165,43 @@ export default function ServerCard({ server }: ServerCardProps) {
 
           {/* Server Specifications Grid */}
           <div className="grid grid-cols-2 gap-3 mt-6">
-            {currentData.track && (
+            {currentServer.track && (
               <div className="bg-white/5 rounded-lg p-3 border border-white/10">
                 <div className="flex items-center gap-2 mb-1">
                   <Gamepad2 className="h-4 w-4 text-amber" />
                   <span className="text-silver text-xs uppercase tracking-wide">Track</span>
                 </div>
-                <p className="text-platinum font-medium text-sm">{currentData.track}</p>
+                <p className="text-platinum font-medium text-sm">{currentServer.track}</p>
               </div>
             )}
 
-            {server.trafficDensity !== null && (
+            {currentServer.gameMode && (
               <div className="bg-white/5 rounded-lg p-3 border border-white/10">
                 <div className="flex items-center gap-2 mb-1">
                   <Activity className="h-4 w-4 text-amber" />
-                  <span className="text-silver text-xs uppercase tracking-wide">Traffic</span>
-                </div>
-                <p className="text-platinum font-medium text-sm">{server.trafficDensity}%</p>
-              </div>
-            )}
-
-            {server.availableVipSlots !== undefined && server.availableVipSlots > 0 && (
-              <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                <div className="flex items-center gap-2 mb-1">
-                  <Crown className="h-4 w-4 text-amber" />
-                  <span className="text-silver text-xs uppercase tracking-wide">VIP Slots</span>
-                </div>
-                <p className="text-platinum font-medium text-sm">{server.availableVipSlots} Available</p>
-              </div>
-            )}
-
-            {currentData.session && (
-              <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                <div className="flex items-center gap-2 mb-1">
-                  <MapPin className="h-4 w-4 text-amber" />
                   <span className="text-silver text-xs uppercase tracking-wide">Mode</span>
                 </div>
-                <p className="text-platinum font-medium text-sm">{currentData.session}</p>
+                <p className="text-platinum font-medium text-sm">{currentServer.gameMode}</p>
               </div>
             )}
-          </div>
 
-          {/* Live Status Indicator */}
-          <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-            <div className="flex items-center gap-2 mb-1">
-              <Wifi className="h-4 w-4 text-amber" />
-              <span className="text-silver text-xs uppercase tracking-wide">Live Status</span>
+            <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+              <div className="flex items-center gap-2 mb-1">
+                <MapPin className="h-4 w-4 text-amber" />
+                <span className="text-silver text-xs uppercase tracking-wide">Status</span>
+              </div>
+              <p className="text-platinum font-medium text-sm capitalize">{currentServer.status}</p>
             </div>
-            <p className="text-platinum font-medium text-sm">
-              {isLoading ? 'Updating...' : serverStatus ? 'Real-time' : 'Database'}
-            </p>
+
+            <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+              <div className="flex items-center gap-2 mb-1">
+                <Crown className="h-4 w-4 text-amber" />
+                <span className="text-silver text-xs uppercase tracking-wide">Live</span>
+              </div>
+              <p className="text-platinum font-medium text-sm">
+                {isLoading ? 'Updating...' : 'Real-time'}
+              </p>
+            </div>
           </div>
         </div>
         
@@ -234,10 +211,10 @@ export default function ServerCard({ server }: ServerCardProps) {
               ? "btn-primary"
               : "bg-white/5 text-silver cursor-not-allowed hover:bg-white/5"
           }`}
-          disabled={!isServerAvailable || !server.joinLink}
+          disabled={!isServerAvailable || !currentServer.joinLink}
           onClick={() => {
-            if (server.joinLink && isServerAvailable) {
-              window.open(server.joinLink, '_blank');
+            if (currentServer.joinLink && isServerAvailable) {
+              window.open(currentServer.joinLink, '_blank');
             }
           }}
         >
@@ -247,4 +224,4 @@ export default function ServerCard({ server }: ServerCardProps) {
       </div>
     </div>
   );
-}
+} 

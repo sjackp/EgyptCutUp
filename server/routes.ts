@@ -4,10 +4,32 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./localAuth";
 import { insertServerSchema, insertCarSchema, insertShopItemSchema, insertDiscordStatsSchema } from "@shared/schema";
 import { z } from "zod";
+import { serverStatusService } from "./services/serverStatusService";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
+
+  // Health check endpoint
+  app.get('/api/health', async (req, res) => {
+    try {
+      // Test database connection
+      await storage.getServers();
+      res.json({ 
+        status: 'healthy', 
+        timestamp: new Date().toISOString(),
+        database: 'connected'
+      });
+    } catch (error: any) {
+      console.error("Health check failed:", error);
+      res.status(503).json({ 
+        status: 'unhealthy',
+        timestamp: new Date().toISOString(),
+        database: 'disconnected',
+        error: error.message
+      });
+    }
+  });
 
   // Auth is now handled in localAuth.ts
 
@@ -16,9 +38,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const servers = await storage.getServers();
       res.json(servers);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching servers:", error);
-      res.status(500).json({ message: "Failed to fetch servers" });
+      
+      // Provide more specific error messages based on error type
+      if (error.code === 'ECONNRESET' || error.message?.includes('socket hang up')) {
+        res.status(503).json({ 
+          message: "Database connection temporarily unavailable. Please try again in a moment.",
+          retryAfter: 5
+        });
+      } else if (error.code === 'ENOTFOUND') {
+        res.status(503).json({ 
+          message: "Database service unavailable. Please check your connection.",
+          retryAfter: 10
+        });
+      } else {
+        res.status(500).json({ message: "Failed to fetch servers" });
+      }
     }
   });
 
@@ -247,6 +283,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.error("Error updating Discord stats:", error);
       res.status(500).json({ message: "Failed to update Discord stats" });
+    }
+  });
+
+  // Real-time server status endpoints
+  app.get('/api/servers/status', async (req, res) => {
+    try {
+      const serversWithStatus = await serverStatusService.getAllServerStatuses();
+      res.json(serversWithStatus);
+    } catch (error) {
+      console.error("Error fetching server status:", error);
+      res.status(500).json({ message: "Failed to fetch server status" });
+    }
+  });
+
+  app.get('/api/servers/:id/status', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid server ID" });
+      }
+      const serverStatus = await serverStatusService.getServerStatus(id);
+      if (!serverStatus) {
+        return res.status(404).json({ message: "Server not found" });
+      }
+      res.json(serverStatus);
+    } catch (error) {
+      console.error("Error fetching server status:", error);
+      res.status(500).json({ message: "Failed to fetch server status" });
+    }
+  });
+
+  app.post('/api/servers/:id/status/refresh', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid server ID" });
+      }
+      const serverStatus = await serverStatusService.forceUpdateServer(id);
+      if (!serverStatus) {
+        return res.status(404).json({ message: "Server not found" });
+      }
+      res.json(serverStatus);
+    } catch (error) {
+      console.error("Error refreshing server status:", error);
+      res.status(500).json({ message: "Failed to refresh server status" });
+    }
+  });
+
+  // Server status cache stats endpoint
+  app.get('/api/servers/status/stats', async (req, res) => {
+    try {
+      const stats = serverStatusService.getCacheStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching status stats:", error);
+      res.status(500).json({ message: "Failed to fetch status stats" });
     }
   });
 

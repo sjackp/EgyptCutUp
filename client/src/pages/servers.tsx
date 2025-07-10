@@ -1,13 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
 import Navigation from "@/components/navigation";
 import ServerCard from "@/components/server-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertCircle } from "lucide-react";
-import { Server } from "@shared/schema";
+import { AlertCircle, Wifi, WifiOff, RefreshCw } from "lucide-react";
+import { useServerStatus } from "@/hooks/useServerStatus";
 
 export default function Servers() {
-  const { data: servers, isLoading, error } = useQuery<Server[]>({
-    queryKey: ["/api/servers"],
+  const { servers, isLoading, error, refreshServers } = useServerStatus({
+    autoRefresh: true,
+    refreshInterval: 30000
   });
 
   return (
@@ -17,8 +17,15 @@ export default function Servers() {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-white mb-4">Server Status</h1>
-            <p className="text-gray-400">Live status of our Assetto Corsa servers across regions</p>
+            <div className="flex items-center justify-center space-x-4 mb-4">
+              <h1 className="text-4xl font-bold text-white">Server Status</h1>
+              <div className="flex items-center space-x-2">
+                <Wifi className="h-6 w-6 text-green-500 animate-pulse" />
+                <span className="text-green-500 text-sm font-medium">Live Updates</span>
+              </div>
+            </div>
+            <p className="text-gray-400">Real-time status of our Assetto Corsa servers across regions</p>
+            <p className="text-gray-500 text-sm mt-2">Auto-refreshing every 30 seconds</p>
           </div>
           
           {isLoading && (
